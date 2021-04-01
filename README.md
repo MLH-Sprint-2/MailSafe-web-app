@@ -1,6 +1,6 @@
-# Getting Started with Create React App
+# MailSafe Web App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This is the web app for MailSafe. Click [here](https://github.com/MLH-Sprint-2/MailSafe-api) for the API.
 
 ## Available Scripts
 
