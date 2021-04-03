@@ -1,0 +1,10 @@
+.landing-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.landing {
+    width: 50vw;
+}
