@@ -23,18 +23,27 @@ import { getDomains } from './api/mailSafe';
 
 const App = () => {
   const [domains, setDomains] = useState(["Loading"]);
-  const [loading, setLoading] = useState(false);
+  const [domainsLoading, setDomainsLoading] = useState(false);
+  const [domainsLoadingError, setDomainsLoadingError] = useState(false);
 
   useEffect( () => {
     const fetchDomains = async () => {
-      setLoading(true);
-      const result = await getDomains();
-      if (result) setDomains(result);
-      setLoading(false);
+      setDomainsLoading(true);
+      try {
+        const result = await getDomains();
+        if (result) setDomains(result);
+      } catch(error) {
+        setDomainsLoadingError(true);
+      }
+      finally {
+        setDomainsLoading(false);
+      }
     }
 
     fetchDomains();
   }, []);
+
+  const domainsLoadingErrorMessage = <p>There was an error loading the domains. Try again later.</p>
 
   return (
     <Router>
@@ -57,13 +66,13 @@ const App = () => {
                 <Example />
               </Route>
               <Route path="/aliases">
-                  <Aliases domains={domains} loading={loading} setLoading={setLoading}/>
+                { domainsLoadingError ? domainsLoadingErrorMessage : <Aliases domains={domains}/> }
               </Route>
               <Route path="/">
-                  <CreateAlias domains={domains} loading={loading} setLoading={setLoading}/>
+                { domainsLoadingError ? domainsLoadingErrorMessage : <CreateAlias domains={domains}/>}
               </Route>
             </Switch>
-            { loading && <p>Loading...</p>}
+            { domainsLoading && <p>Domains Loading...</p>}
           </Landing>
         </div>
       </div>

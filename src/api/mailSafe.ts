@@ -9,13 +9,8 @@ const getFullPath = (resource: string) => {
 
 export const getDomainAliases = async (domain: string) => {
     const resource = `alias/${domain}`;
-
-    try {
-        const result = await axios.get(getFullPath(resource));
-        return result.data;
-    } catch (error) {
-        console.error(error.message);
-    }
+    const result = await axios.get(getFullPath(resource));
+    return result.data;
 }
 
 export const deleteDomainAlias = async (domain: string, aliasId: string) => {
@@ -37,11 +32,7 @@ export const createDomainAlias = async (alias: string, email: string, domain: st
 
 export const getDomains = async () => {
     const resource = 'domains';
-    try {
-        const result = await axios.get(getFullPath(resource));
-        return result.data.domains;
-    } catch (error) {
-        console.error(error.message);
-    }
+    const result = await axios.get(getFullPath(resource));
+    return result.data.domains;
 }
 

@@ -2,17 +2,14 @@ import React, { useState, useEffect } from 'react';
 
 import { createDomainAlias } from '../../api/mailSafe';
 
-const CreateAlias: React.VFC<{
-    domains: string[],
-    loading: boolean,
-    setLoading: React.Dispatch<React.SetStateAction<boolean>>
-}> = ( { domains, setLoading }) => {
+const CreateAlias: React.VFC<{ domains: string[] }> = ( { domains }) => {
     const [domain, setDomain] = useState(domains[0]);
 
     const [alias, setAlias] = useState("");
     const [email, setEmail] = useState("");
 
     const [message, setMessage] = useState("");
+    const [loading, setLoading] = useState(false);
 
     useEffect( () => {
         setDomain(domains[0]);
@@ -36,10 +33,20 @@ const CreateAlias: React.VFC<{
             setAlias("");
             setEmail("");
         } catch (error) {
-            setMessage(error.response.data.message);
+            if (error?.response?.data?.message) setMessage(error.response.data.message);
+            else if (error?.response?.status) setMessage(error.response.statusText);
+            else setMessage(error.message);
         } finally {
             setLoading(false);
         }
+    }
+
+    let infoMessage = <></>;
+
+    if (loading) {
+        infoMessage = <p>Loading...</p>
+    } else if (message) {
+        infoMessage = <p>{message}</p>;
     }
 
     return (
@@ -73,7 +80,7 @@ const CreateAlias: React.VFC<{
                 
                 <input type="submit" value="Create"></input>
             </form>
-            { message && <p>{message}</p> }
+            { infoMessage }
         </div>
     )
 }

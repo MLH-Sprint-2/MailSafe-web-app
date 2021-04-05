@@ -4,13 +4,13 @@ import './Aliases.css';
 
 import { getDomainAliases, deleteDomainAlias } from '../../api/mailSafe';
 
-const Aliases: React.VFC<{
-    domains: string[],
-    loading: boolean,
-    setLoading: React.Dispatch<React.SetStateAction<boolean>>
-}> = ( { domains, loading, setLoading }) => {
+const Aliases: React.VFC<{ domains: string[] }> = ( { domains }) => {
     const [domain, setDomain] = useState(domains[0]);
     const [aliases, setAliases] = useState([]);
+
+    const [loading, setLoading] = useState(false);
+    const [firstLoad, setFirstLoad] = useState(false);
+    const [errorMessage, setErrorMessage] = useState("");
 
     useEffect( () => {
         setDomain(domains[0]);
@@ -19,21 +19,25 @@ const Aliases: React.VFC<{
     const handleSubmit = async (e: any) => {
         e.preventDefault();
         if (domain === "Loading") {
-            alert("Domains are loading");
+            setErrorMessage("Domains are loading");
             return;
         }
         if (!domain) {
-            alert("Domain must be set");
+            setErrorMessage("Domain must be set");
             return;
         }
         try {
+            setErrorMessage("");
             setLoading(true);
             setAliases([]);
             const aliases = await getDomainAliases(domain);
             if (aliases) setAliases(aliases);
         } catch (error) {
-            alert(error.message);
+            if (error?.response?.data?.message) setErrorMessage(error.response.data.message);
+            else if (error?.response?.status) setErrorMessage(error.response.statusText);
+            else setErrorMessage(error.message);
         } finally {
+            setFirstLoad(true);
             setLoading(false);
         }
     }
@@ -42,6 +46,16 @@ const Aliases: React.VFC<{
         const newAlises = aliases.filter((element: any) => element.id !== id);
         setAliases(newAlises);
         deleteDomainAlias(domain, id);
+    }
+
+    let message = <></>;
+
+    if (loading) {
+        message = <p>Loading...</p>
+    } else if (errorMessage) {
+        message = <p>{errorMessage}</p>;
+    } else if (firstLoad && aliases.length === 0) {
+        message = <p>No aliases found</p>;
     }
 
     return (
@@ -57,7 +71,7 @@ const Aliases: React.VFC<{
                 
                 <input type="submit" value="Search"></input>
             </form>
-            
+
             { aliases.length !== 0 && (
                 <table className="aliases-table">
                     <tbody>
@@ -71,8 +85,7 @@ const Aliases: React.VFC<{
                     </tbody>
                 </table>
             )}
-            
-            { aliases.length === 0 && loading === false && <p>No aliases found</p>}
+            {message}
         </div>
     )
 }
