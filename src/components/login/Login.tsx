@@ -38,7 +38,7 @@ const Login: React.VFC<{ setIsLoggedIn: React.Dispatch<React.SetStateAction<bool
 
     return (
         <div>
-            <p>Click the button below to login</p>
+            <p>Login below</p>
             <form onSubmit={handleSubmit}>
 
                 <label>
