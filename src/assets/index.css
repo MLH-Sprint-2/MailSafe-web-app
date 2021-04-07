@@ -12,13 +12,16 @@ code {
     monospace;
 }
 
-
 .navbar li {
   display: inline;
 }
 
-.navbar li a {
+.navbar li a, .navbar li span {
   text-align: center;
   padding: 14px 16px;
   text-decoration: none;
+}
+
+.navbar li span {
+  cursor: pointer;
 }
