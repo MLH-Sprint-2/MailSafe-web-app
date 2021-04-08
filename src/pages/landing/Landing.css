@@ -1,10 +1,54 @@
 .landing-container {
     display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
+    background-color: #f3f3f3;
+    flex-grow: 1;
 }
 
-.landing {
+.landing-right, .landing-left {
     width: 50vw;
+    display: flex;
+    align-items: center;
+}
+
+.landing-left .landing-content {
+    padding: 15%;
+}
+
+.landing-title {
+    font-size: 3rem;
+    margin-block-start: 0;
+    margin-block-end: 0;
+    margin-bottom: 1.5rem;
+}
+
+.landing-title span {
+    background-color: #292929;
+    color: white;
+    font-family: monospace;
+    padding: 0 0.75rem;
+    font-size: 3.5rem;
+}
+
+.landing-subtitle {
+    font-size: 1.5rem;
+    padding: 0;
+    margin-block-start: 0;
+    margin-block-end: 0;
+    margin-bottom: 2rem;
+}
+
+.landing-cta {
+    text-transform: uppercase;
+    padding: 1rem;
+    font-size: 1.5rem;
+    font-family: monospace;
+    background-color: transparent;
+    border: 2px solid #292929;
+    transition: all 0.1s ease-in-out;
+}
+
+.landing-cta:hover {
+    background-color: #292929;
+    color: #f3f3f3;
+    cursor: pointer;
 }

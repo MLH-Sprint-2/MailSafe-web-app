@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 
+import './Login.css'
 
 const Login: React.VFC<{ setIsLoggedIn: React.Dispatch<React.SetStateAction<boolean>> }> = ({ setIsLoggedIn }) => {
 
@@ -38,10 +39,8 @@ const Login: React.VFC<{ setIsLoggedIn: React.Dispatch<React.SetStateAction<bool
 
     return (
         <div>
-            <p>Login below</p>
             <form onSubmit={handleSubmit}>
-
-                <label>
+                <label className="login-field">
                     <span>Username</span><br />
                     <input
                         type="text"
@@ -49,7 +48,7 @@ const Login: React.VFC<{ setIsLoggedIn: React.Dispatch<React.SetStateAction<bool
                         onChange={e => setUsername(e.target.value)}/>
                 </label>
                 <br />
-                <label>
+                <label className="login-field">
                     <span>Password</span><br />
                     <input
                         type="password"
@@ -57,7 +56,7 @@ const Login: React.VFC<{ setIsLoggedIn: React.Dispatch<React.SetStateAction<bool
                         onChange={e => setPassword(e.target.value)}/>
                 </label>
                 <br />
-                <button type="submit">Login</button>
+                <button className="login-button" type="submit">Login</button>
 
             </form>
 

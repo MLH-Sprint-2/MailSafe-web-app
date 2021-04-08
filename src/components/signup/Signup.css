@@ -1,0 +1,31 @@
+.signup-title {
+    font-size: 2rem;
+    font-weight: bold;
+}
+
+.signup-field span {
+    font-weight: lighter;
+    text-transform: uppercase;
+}
+
+.signup-field input {
+    margin: 0.7rem 0 1rem 0;
+    font-size: 1rem;
+    padding: 0.5rem;
+}
+
+.signup-button {
+    text-transform: uppercase;
+    padding: 0.5rem;
+    font-size: 1rem;
+    font-family: monospace;
+    background-color: transparent;
+    border: 1px solid #292929;
+    transition: all 0.1s ease-in-out;
+}
+
+.signup-button:hover {
+    background-color: #292929;
+    color: #f3f3f3;
+    cursor: pointer;
+}

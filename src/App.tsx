@@ -4,22 +4,23 @@ import {
   BrowserRouter as Router,
   Redirect,
   Switch,
-  Route,
-  Link 
+  Route
 } from 'react-router-dom';
 
 import './assets/index.css';
 
 /* pages */
-import Landing from './pages/landing/Landing'
+import Content from './container/content/Content'
 
 /* components */
 import CreateAlias from './components/createAlias/CreateAlias';
 import Aliases from './components/aliases/Aliases';
 import Login from './components/login/Login';
+import Navbar from './components/navbar/Navbar';
 
 /* api */
 import { getDomains } from './api/mailSafe';
+import Landing from './pages/landing/Landing';
 
 
 const App = () => {
@@ -27,6 +28,7 @@ const App = () => {
   const [domainsLoading, setDomainsLoading] = useState(false);
   const [domainsLoadingError, setDomainsLoadingError] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  
 
   useEffect( () => {
     const fetchDomains = async () => {
@@ -46,63 +48,50 @@ const App = () => {
   }, []);
 
   const domainsLoadingErrorMessage = <p>There was an error loading the domains. Try again later.</p>
-
-  const logout = () => {
-    setIsLoggedIn(false);
-  }
-
   return (
     <Router>
-      <div>
-        <nav className="navbar">
-          <ul>
-            { isLoggedIn ? (
-              <>
-                <li>
-                  <Link to="/">Add Alias</Link>
-                </li>
-                <li>
-                  <Link to="/aliases">Fetch Aliases</Link>
-                </li>
-                <li>
-                  <span onClick={logout}>Logout</span>
-                </li>
-              </>
-            ) :
-              <>
-                <li>
-                  <Link to="/login">Login</Link>
-                </li>
-              </>
+      <div className="container">
+
+        <Navbar isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
+
+        <Switch>
+          
+          {/* <Route path="/login">
+            { isLoggedIn ? <Redirect to="/create-alias" /> : <Content><Login setIsLoggedIn={setIsLoggedIn} /></Content> }
+          </Route>
+
+          <Route path="/sign-up">
+            { isLoggedIn ? <Redirect to="/create-alias" /> : <Content><Login setIsLoggedIn={setIsLoggedIn} /></Content> }
+          </Route> */}
+
+          <Route path="/aliases">
+            { isLoggedIn ? 
+              (domainsLoadingError ? domainsLoadingErrorMessage : <Content><Aliases domains={domains}/></Content> ) :
+              <Redirect to="/login" />
             }
-          </ul>
-        </nav>
+          </Route>
+          <Route path="/create-alias">
+            { isLoggedIn ? 
+              (domainsLoadingError ? domainsLoadingErrorMessage : <Content><CreateAlias domains={domains}/></Content>) :
+              <Redirect to="/login" />
+            }
+          </Route>
+          
+          <Route path="/login">
+            { isLoggedIn ? <Redirect to="/" /> : <Landing isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} type="login"/> }
+          </Route>
 
-        <div className="content-container">
-          <Landing>
-            <Switch>
+          <Route path="/sign-up">
+            { isLoggedIn ? <Redirect to="/" /> : <Landing isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} type="sign-up"/> }
+          </Route>
 
-              <Route path="/login">
-                { isLoggedIn ? <Redirect to="/" /> : <Login setIsLoggedIn={setIsLoggedIn} /> }
-              </Route>
+          <Route path="/">
+            { !isLoggedIn ? <Redirect to="/sign-up" /> : <Landing isLoggedIn={isLoggedIn} type="none"/> }
+          </Route>
+          
+        </Switch>
+        { domainsLoading && <p>Domains Loading...</p>}
 
-
-              <Route path="/aliases">
-                { isLoggedIn ? 
-                  (domainsLoadingError ? domainsLoadingErrorMessage : <Aliases domains={domains}/> ) :
-                  <Redirect to="/login" />
-                }
-              </Route>
-              <Route path="/">
-                { isLoggedIn ? 
-                  (domainsLoadingError ? domainsLoadingErrorMessage : <CreateAlias domains={domains}/>) :
-                  <Redirect to="/login" />
-                }
-              </Route>
-            </Switch>
-            { domainsLoading && <p>Domains Loading...</p>}
-          </Landing>
-        </div>
       </div>
     </Router>
   )
