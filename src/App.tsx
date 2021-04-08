@@ -59,7 +59,7 @@ const App = () => {
             { isLoggedIn ? (
               <>
                 <li>
-                  <Link to="/">Add Alias</Link>
+                  <Link to="/create-alias">Add Alias</Link>
                 </li>
                 <li>
                   <Link to="/aliases">Fetch Aliases</Link>
@@ -86,19 +86,23 @@ const App = () => {
                 { isLoggedIn ? <Redirect to="/" /> : <Login setIsLoggedIn={setIsLoggedIn} /> }
               </Route>
 
-
               <Route path="/aliases">
                 { isLoggedIn ? 
                   (domainsLoadingError ? domainsLoadingErrorMessage : <Aliases domains={domains}/> ) :
                   <Redirect to="/login" />
                 }
               </Route>
-              <Route path="/">
+              <Route path="/create-alias">
                 { isLoggedIn ? 
                   (domainsLoadingError ? domainsLoadingErrorMessage : <CreateAlias domains={domains}/>) :
                   <Redirect to="/login" />
                 }
               </Route>
+
+              <Route path="/">
+                <Redirect to="/create-alias" />
+              </Route>
+              
             </Switch>
             { domainsLoading && <p>Domains Loading...</p>}
           </Landing>
