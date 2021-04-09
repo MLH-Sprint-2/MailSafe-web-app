@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 
+import './CreateAlias.css';
+
 import { createDomainAlias } from '../../api/mailSafe';
 
-const CreateAlias: React.VFC<{ domains: string[] }> = ( { domains }) => {
+const CreateAlias: React.VFC<{ domains: string[], token: string, email: string }> = ( { domains, token, email }) => {
     const [domain, setDomain] = useState(domains[0]);
 
     const [alias, setAlias] = useState("");
-    const [email, setEmail] = useState("");
 
     const [message, setMessage] = useState("");
     const [loading, setLoading] = useState(false);
@@ -28,10 +29,9 @@ const CreateAlias: React.VFC<{ domains: string[] }> = ( { domains }) => {
         try {
             setLoading(true);
             setMessage("");
-            await createDomainAlias(alias, email, domain);
+            await createDomainAlias(alias, email, domain, token);
             setMessage("Success!");
             setAlias("");
-            setEmail("");
         } catch (error) {
             if (error?.response?.data?.message) setMessage(error.response.data.message);
             else if (error?.response?.status) setMessage(error.response.statusText);
@@ -50,9 +50,9 @@ const CreateAlias: React.VFC<{ domains: string[] }> = ( { domains }) => {
     }
 
     return (
-        <div className="alias-container">
+        <div className="create-alias-container">
             <form onSubmit={handleSubmit}>
-                <label>
+                <label className="create-alias-name">
                     <span>Your new alias</span>
                     <br/>
                     <input 
@@ -61,24 +61,19 @@ const CreateAlias: React.VFC<{ domains: string[] }> = ( { domains }) => {
                         onChange={e => setAlias(e.target.value)}
                         />
                 </label>
+                <span className="create-alias-at">@</span>
                 <select 
                     value={domain}
                     onChange={ e => setDomain(e.target.value)}
+                    className="create-alias-domain"
                     >
                     { domains.map( domain => <option key={domain} value={domain}>{domain}</option>) }
                 </select>
                 <br />
-                <label>
-                    <span>Your email address</span>
-                    <br />
-                    <input 
-                        type="text"
-                        value={email}
-                        onChange={e => setEmail(e.target.value)}
-                        />
-                </label>
+                <p className="create-alias-email-title">Your e-mail address</p>
+                <p className="create-alias-email">{email}</p>
                 
-                <input type="submit" value="Create"></input>
+                <input className="create-alias-submit" type="submit" value="Create"></input>
             </form>
             { infoMessage }
         </div>

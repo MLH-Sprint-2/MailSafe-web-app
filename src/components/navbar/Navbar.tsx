@@ -17,7 +17,7 @@ const Navbar: React.VFC< {
     <nav className="navbar">
 
       <div className="navbar-left">
-        <span className="navbar-title">MailSafe</span>
+        <Link to="/" className="navbar-title">MailSafe</Link>
       </div>
 
       <div className="navbar-right">

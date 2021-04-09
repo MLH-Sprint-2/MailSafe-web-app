@@ -1,37 +1,25 @@
-import React, { useEffect, useState }  from 'react';
+import React, { useState }  from 'react';
 
 import './Aliases.css';
 
 import { getDomainAliases, deleteDomainAlias } from '../../api/mailSafe';
 
-const Aliases: React.VFC<{ domains: string[] }> = ( { domains }) => {
-    const [domain, setDomain] = useState(domains[0]);
+const Aliases: React.VFC<{ token: string, email: string }> = ( { token, email }) => {
     const [aliases, setAliases] = useState([]);
 
     const [loading, setLoading] = useState(false);
     const [firstLoad, setFirstLoad] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
 
-    useEffect( () => {
-        setDomain(domains[0]);
-    }, [domains]);
-
-    const handleSubmit = async (e: any) => {
-        e.preventDefault();
-        if (domain === "Loading") {
-            setErrorMessage("Domains are loading");
-            return;
-        }
-        if (!domain) {
-            setErrorMessage("Domain must be set");
-            return;
-        }
+    const getAliases = async () => {
         try {
             setErrorMessage("");
             setLoading(true);
             setAliases([]);
-            const aliases = await getDomainAliases(domain);
-            if (aliases) setAliases(aliases);
+            const aliases = await getDomainAliases("swiftmegaminds.tech", token);
+            console.log(aliases);
+            const accountAliases = aliases.filter( (element: any) => element.recipients[0].includes(email) )
+            if (aliases) setAliases(accountAliases);
         } catch (error) {
             if (error?.response?.data?.message) setErrorMessage(error.response.data.message);
             else if (error?.response?.status) setErrorMessage(error.response.statusText);
@@ -45,7 +33,7 @@ const Aliases: React.VFC<{ domains: string[] }> = ( { domains }) => {
     const deleteAlias = (domain: string, id: string) => {
         const newAlises = aliases.filter((element: any) => element.id !== id);
         setAliases(newAlises);
-        deleteDomainAlias(domain, id);
+        deleteDomainAlias(domain, id, token);
     }
 
     let message = <></>;
@@ -60,7 +48,7 @@ const Aliases: React.VFC<{ domains: string[] }> = ( { domains }) => {
 
     return (
         <div className="alias-container">
-            <form onSubmit={handleSubmit}>
+            {/* <form onSubmit={handleSubmit}>
                 <select 
                     value={domain}
                     onChange={ e => setDomain(e.target.value)}
@@ -70,10 +58,19 @@ const Aliases: React.VFC<{ domains: string[] }> = ( { domains }) => {
                 <br />
                 
                 <input type="submit" value="Search"></input>
-            </form>
+            </form> */}
+
+            <p className="alias-title">Your aliases</p>
 
             { aliases.length !== 0 && (
                 <table className="aliases-table">
+                    <thead>
+                        <tr>
+                            <td>Alias</td>
+                            <td>Recipient</td>
+                            <td>Delete</td>
+                        </tr>
+                    </thead>
                     <tbody>
                         { aliases.map( (alias: any) => (
                             <tr key={alias.name} className="aliases-table-row">
@@ -85,6 +82,9 @@ const Aliases: React.VFC<{ domains: string[] }> = ( { domains }) => {
                     </tbody>
                 </table>
             )}
+
+            <button className="alias-reload" type="button" onClick={getAliases}>Load</button>
+
             {message}
         </div>
     )

@@ -10,8 +10,10 @@ import Signup from '../../components/signup/Signup';
 const Landing: React.VFC<{
   type: "login" | "sign-up" | "none",
   isLoggedIn: boolean,
-  setIsLoggedIn?: React.Dispatch<React.SetStateAction<boolean>>
-}> = ({ type, isLoggedIn, setIsLoggedIn }) => {
+  setIsLoggedIn?: React.Dispatch<React.SetStateAction<boolean>>,
+  setAuthToken: React.Dispatch<React.SetStateAction<string>>
+  setEmail: React.Dispatch<React.SetStateAction<string>>
+}> = ({ type, isLoggedIn, setIsLoggedIn, setAuthToken, setEmail }) => {
   return (
     <div className="landing-container">
       <div className="landing-left">
@@ -27,10 +29,10 @@ const Landing: React.VFC<{
         </div>
       </div>
       <div className="landing-right">
-        { type === "login" && (setIsLoggedIn ? <Login setIsLoggedIn={setIsLoggedIn}/> : "<p>Error. Missing property</p>") }
-        { type === "sign-up" && (setIsLoggedIn ? <Signup setIsLoggedIn={setIsLoggedIn}/> : "<p>Error. Missing property</p>")}
+        { type === "login" && (setIsLoggedIn ? <Login setEmail={setEmail} setAuthToken={setAuthToken} setIsLoggedIn={setIsLoggedIn}/> : "<p>Error. Missing property</p>") }
+        { type === "sign-up" && (setIsLoggedIn ? <Signup setEmail={setEmail} setAuthToken={setAuthToken} setIsLoggedIn={setIsLoggedIn}/> : "<p>Error. Missing property</p>")}
         { type === "none" && (
-          <p>Todo content</p>
+          <></>
         )}
       </div>
     </div>
