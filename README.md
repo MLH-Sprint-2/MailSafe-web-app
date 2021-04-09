@@ -1,6 +1,17 @@
+![mailbanner](https://user-images.githubusercontent.com/22732776/114239223-b44f7500-997d-11eb-8f3e-a74f9e4cc101.png)
 # MailSafe Web App
 
 This is the web app for MailSafe. Click [here](https://github.com/MLH-Sprint-2/MailSafe-api) for the API.
+
+![image](https://user-images.githubusercontent.com/22732776/114239406-f7114d00-997d-11eb-8fc3-9a0fb46e83fc.png)
+
+![image](https://user-images.githubusercontent.com/22732776/114239282-c7624500-997d-11eb-9d3b-74ae4ae64d0d.png)
+
+![image](https://user-images.githubusercontent.com/22732776/114239516-18723900-997e-11eb-9f6e-47ae718e119e.png)
+
+![image](https://user-images.githubusercontent.com/22732776/114239559-23c56480-997e-11eb-820c-270c1904e542.png)
+
+
 
 ## Available Scripts
 
