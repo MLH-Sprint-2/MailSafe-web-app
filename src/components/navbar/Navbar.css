@@ -5,13 +5,15 @@
     font-size: 1.10rem;
     position: relative;
     box-shadow: 0px 1px 5px rgba(0,0,0,0.05);
+    background-color: white;
 }
 
-.navbar span.navbar-title {
+.navbar a.navbar-title {
     font-weight: bold;
     font-size: 1.5rem;
     margin-left: 1rem;
     color: #292929;
+    text-decoration: none;
 }
 
 .navbar-right, .navbar-left {

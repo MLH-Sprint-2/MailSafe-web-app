@@ -1,8 +1,14 @@
 import React, { useState } from 'react';
 
+import { login } from '../../api/mailSafe';
+
 import './Login.css'
 
-const Login: React.VFC<{ setIsLoggedIn: React.Dispatch<React.SetStateAction<boolean>> }> = ({ setIsLoggedIn }) => {
+const Login: React.VFC<{ 
+    setIsLoggedIn: React.Dispatch<React.SetStateAction<boolean>>,
+    setAuthToken: React.Dispatch<React.SetStateAction<string>>,
+    setEmail: React.Dispatch<React.SetStateAction<string>>
+ }> = ({ setIsLoggedIn, setAuthToken, setEmail }) => {
 
     const [loading, setLoading] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
@@ -10,7 +16,7 @@ const Login: React.VFC<{ setIsLoggedIn: React.Dispatch<React.SetStateAction<bool
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
 
-    const handleSubmit = (e: any) => {
+    const handleSubmit = async (e: any) => {
         e.preventDefault();
         if (!username || !password) {
             setErrorMessage("Username and password cannot be empty");
@@ -20,13 +26,15 @@ const Login: React.VFC<{ setIsLoggedIn: React.Dispatch<React.SetStateAction<bool
                 setLoading(true);
 
                 // send request
-
+                const [ token, userEmail ] = await login(username, password);
+                setAuthToken(token);
+                setEmail(userEmail)
+                setLoading(false);
                 setIsLoggedIn(true);
             } catch (error) {
                 if (error?.response?.data?.message) setErrorMessage(error.response.data.message);
                 else if (error?.response?.status) setErrorMessage(error.response.statusText);
                 else setErrorMessage(error.message);
-            } finally {
                 setLoading(false);
             }
         }

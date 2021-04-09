@@ -1,20 +1,25 @@
 import React, { useState } from 'react';
+import { login, signup } from '../../api/mailSafe';
 
 import './Signup.css'
 
-const Login: React.VFC<{ setIsLoggedIn: React.Dispatch<React.SetStateAction<boolean>> }> = ({ setIsLoggedIn }) => {
+const Login: React.VFC<{ 
+    setIsLoggedIn: React.Dispatch<React.SetStateAction<boolean>>,
+    setAuthToken: React.Dispatch<React.SetStateAction<string>>,
+    setEmail: React.Dispatch<React.SetStateAction<string>>
+}> = ({ setIsLoggedIn, setAuthToken, setEmail} ) => {
 
     const [loading, setLoading] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
-
     const [username, setUsername] = useState("");
+    const [signupEmail, setSignupEmail] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
 
-    const handleSubmit = (e: any) => {
+    const handleSubmit = async (e: any) => {
         e.preventDefault();
-        if (!username || !password || !confirmPassword) {
-            setErrorMessage("Username, password, and confirm password cannot be empty");
+        if (!username || !signupEmail ||!password || !confirmPassword) {
+            setErrorMessage("Username, email, password, and confirm password cannot be empty");
         }
         else if (password !== confirmPassword) {
             setErrorMessage("Passwords do not match");
@@ -24,15 +29,18 @@ const Login: React.VFC<{ setIsLoggedIn: React.Dispatch<React.SetStateAction<bool
                 setErrorMessage("");
                 setLoading(true);
 
-                // send request
-
+                await signup(signupEmail, username, password);
+                const [token, userEmail] = await login(username, password);
+                setAuthToken(token);
+                setEmail(userEmail);
+                setLoading(false);
                 setIsLoggedIn(true);
             } catch (error) {
                 if (error?.response?.data?.message) setErrorMessage(error.response.data.message);
                 else if (error?.response?.status) setErrorMessage(error.response.statusText);
                 else setErrorMessage(error.message);
-            } finally {
                 setLoading(false);
+            } finally {
             }
         }
     }
@@ -51,6 +59,14 @@ const Login: React.VFC<{ setIsLoggedIn: React.Dispatch<React.SetStateAction<bool
                         type="text"
                         value={username}
                         onChange={e => setUsername(e.target.value)}/>
+                </label>
+                <br />
+                <label className="signup-field">
+                    <span>Email</span><br />
+                    <input
+                        type="text"
+                        value={signupEmail}
+                        onChange={e => setSignupEmail(e.target.value)}/>
                 </label>
                 <br />
                 <label className="signup-field">
